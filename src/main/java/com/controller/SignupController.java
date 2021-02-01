@@ -23,59 +23,52 @@ import com.dao.Signupdao;
 public class SignupController {
 	@Autowired
 	Signupdao dao;
-	
+
 	@PostMapping("signup")
-	public ResponseBean<SignupBean> signup(@RequestBody SignupBean signUpBean)
-	{
-		ResponseBean<SignupBean> response=new ResponseBean<>();
+	public ResponseBean<SignupBean> signup(@RequestBody SignupBean signUpBean) {
+		ResponseBean<SignupBean> response = new ResponseBean<>();
 		dao.signupUser(signUpBean);
-		
+
 		response.setData(signUpBean);
 		response.setMsg("User SignUp....");
 		response.setStatus(200);
-		
+
 		return response;
 	}
-	
+
 	@GetMapping("ListUser")
-	public ResponseBean<List<SignupBean>> listUser()
-	{
-		ResponseBean<List<SignupBean>> response= new ResponseBean<>();
-			List<SignupBean> bean=null;
-			bean=dao.showusers(bean);
-			
-			response.setData(bean);
-			response.setMsg("Users...");
-			response.setStatus(200);
-		
-		
+	public ResponseBean<List<SignupBean>> listUser() {
+		ResponseBean<List<SignupBean>> response = new ResponseBean<>();
+		List<SignupBean> bean = null;
+		bean = dao.showusers(bean);
+
+		response.setData(bean);
+		response.setMsg("Users...");
+		response.setStatus(200);
+
 		return response;
-		
+
 	}
-	
+
 	@DeleteMapping("deleteuser/{userid}")
-	public ResponseBean<SignupBean> deleteuser(@PathVariable("userid") int userid)
-	{
+	public ResponseBean<SignupBean> deleteuser(@PathVariable("userid") int userid) {
 		ResponseBean<SignupBean> response = new ResponseBean<>();
-				SignupBean bean =null;
-				bean=dao.deleteuser(userid);
-				
-				response.setData(bean);
-				if(bean != null)
-				{
-					response.setMsg("User Deleted");
-				}else
-				{
-					response.setMsg("User Not Found...");
-				}
-				response.setStatus(200);
-			
-			return response;
+		SignupBean bean = null;
+		bean = dao.deleteuser(userid);
+
+		response.setData(bean);
+		if (bean != null) {
+			response.setMsg("User Deleted");
+		} else {
+			response.setMsg("User Not Found...");
+		}
+		response.setStatus(200);
+
+		return response;
 	}
-	
+
 	@PutMapping("updateuser")
-	public ResponseBean<SignupBean> updateUser(@RequestBody SignupBean signupBean)
-	{
+	public ResponseBean<SignupBean> updateUser(@RequestBody SignupBean signupBean) {
 		ResponseBean<SignupBean> response = new ResponseBean<>();
 		dao.updateUser(signupBean);
 		response.setData(signupBean);
@@ -83,19 +76,23 @@ public class SignupController {
 		response.setStatus(200);
 		return response;
 	}
-	
+
 	@PostMapping("login")
-	public ResponseBean<SignupBean> login(@RequestBody LoginBean login)
-	{
-		SignupBean bean=null;
-		ResponseBean<SignupBean> response= new ResponseBean<>();
-		bean=dao.login(login.getEmail(),login.getPassword());
-		response.setData(bean);
-		response.setMsg("User Login");
-		response.setStatus(200);
+	public ResponseBean<SignupBean> login(@RequestBody LoginBean login) {
+		SignupBean bean = null;
+		ResponseBean<SignupBean> response = new ResponseBean<>();
+		bean = dao.login(login.getEmail(), login.getPassword());
+
+		if (bean != null) {
+			response.setData(bean);
+			response.setMsg("User Login");
+
+			response.setStatus(200);
+		} else {
+			response.setMsg("user not found!!!");
+			response.setStatus(201);
+		}
 		return response;
 	}
-	
-	
 
 }
